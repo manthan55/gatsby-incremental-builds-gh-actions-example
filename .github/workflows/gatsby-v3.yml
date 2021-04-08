@@ -6,46 +6,38 @@ on:
   workflow_dispatch: {}
  
 jobs:
-
-  RunID:
-    runs-on: windows-2019
+  Build:
+    runs-on: ubuntu-latest
+    name: Build Site
     steps:
-      - name: Output Run ID
-        run: echo ${{ github.run_id }}
-      - name: Output Run Number
-        run: echo ${{ github.run_number }}
-
-  # Build:
-  #   runs-on: windows-2019
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       
-  #     - name: Using cached .cache
-  #       uses: actions/cache@v2
-  #       with:
-  #        path: ".cache"
-  #        key: ${{ runner.os }}-cache-v1-${{ hashFiles('**/package-lock.json') }}
+      - name: Using cached .cache
+        uses: actions/cache@v2
+        with:
+         path: ".cache"
+         key: ${{ runner.os }}-cache-${{ hashFiles('**/package-lock.json') }}
 
-  #     - name: Using cached public
-  #       uses: actions/cache@v2
-  #       with:
-  #        path: "public"
-  #        key: ${{ runner.os }}-public-v1-${{ hashFiles('**/package-lock.json') }}
+      - name: Using cached public
+        uses: actions/cache@v2
+        with:
+         path: "public"
+         key: ${{ runner.os }}-public-${{ hashFiles('**/package-lock.json') }}
 
-  #     - name: Using cached node modules
-  #       uses: actions/cache@v2
-  #       with:
-  #        path: "**/node_modules"
-  #        key: ${{ runner.os }}-node-modules-v1-${{ hashFiles('**/package-lock.json') }}
-  #     - name: npm build - en-US
-  #       run: npm run build_locale --locale=en-US
+      - name: Using cached node modules
+        uses: actions/cache@v2
+        with:
+         path: "**/node_modules"
+         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: npm build - en-US
+        run: npm run build:incremental:v3
 
-  #     - name: Zip public folder
-  #       run: 7z a public.zip ./public/*
+      - name: Zip public folder
+        run: 7z a public.zip ./public/*
 
-  #     - name: Upload artifact 
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: public
-  #         path: public.zip
+      - name: Upload artifact 
+        uses: actions/upload-artifact@v2
+        with:
+          name: public
+          path: public.zip
