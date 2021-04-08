@@ -51,6 +51,7 @@
   "scripts": {
     "build": "gatsby build",
     "build:incremental": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
+    "build:incremental:windows": "SET GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true && gatsby build --log-pages",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
