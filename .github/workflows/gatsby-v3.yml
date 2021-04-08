@@ -30,7 +30,11 @@ jobs:
         with:
          path: "**/node_modules"
          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: npm build - en-US
+      
+      - name: npm install
+        run: npm install
+
+      - name: npm build:incremental:v3
         run: npm run build:incremental:v3
 
       - name: Zip public folder
