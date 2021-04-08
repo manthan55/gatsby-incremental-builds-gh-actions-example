@@ -70,3 +70,8 @@ yarn-error.log
 
 # workers
 dist
+
+
+# Temporary
+# Ignoring GitHub workflow files
+.github/
