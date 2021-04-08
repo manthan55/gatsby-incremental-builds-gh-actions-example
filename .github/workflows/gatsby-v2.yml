@@ -1,0 +1,47 @@
+name: Gatsby-v2 CI
+
+on:
+  push:
+    branches: [ gatsby-v2 ]
+  workflow_dispatch: {}
+ 
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    name: Build Site
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Using cached .cache
+        uses: actions/cache@v2
+        with:
+         path: ".cache"
+         key: ${{ runner.os }}-cache-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Using cached public
+        uses: actions/cache@v2
+        with:
+         path: "public"
+         key: ${{ runner.os }}-public-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Using cached node modules
+        uses: actions/cache@v2
+        with:
+         path: "**/node_modules"
+         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: npm install
+        run: npm install
+
+      - name: npm build:incremental
+        run: npm run build:incremental
+
+      - name: Zip public folder
+        run: 7z a public.zip ./public/*
+
+      - name: Upload artifact 
+        uses: actions/upload-artifact@v2
+        with:
+          name: public
+          path: public.zip
